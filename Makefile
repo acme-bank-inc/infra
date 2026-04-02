@@ -1,4 +1,4 @@
-.PHONY: plan apply destroy docker-up docker-down docker-build init
+.PHONY: init plan apply destroy docker-build docker-up docker-down ssh help
 
 ## Terraform targets
 
@@ -24,6 +24,11 @@ docker-up: ## Start all services locally
 
 docker-down: ## Stop all services locally
 	docker compose down
+
+## Remote targets
+
+ssh: ## SSH into the EC2 instance
+	@echo "Run: $$(cd terraform && terraform output -raw ssh_command)"
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

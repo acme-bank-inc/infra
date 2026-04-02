@@ -1,8 +1,7 @@
-# Stub Dockerfile for banking-api
+# Stub Dockerfile for banking-api (Spring Boot)
 # Replace with actual build from github.com/acme-bank-inc/banking-api
-FROM node:20-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY . .
-RUN npm install --production 2>/dev/null || true
 EXPOSE 8080
-CMD ["node", "server.js"]
+CMD ["java", "-jar", "app.jar"]

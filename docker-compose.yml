@@ -1,71 +1,106 @@
-version: "3.8"
-
 services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - banking-api
+      - mobile-banking-api
+      - wealth-management-api
+      - internal-compliance-api
+      - online-banking-portal
+      - internal-admin-portal
+      - online-banking-portal-staging
+    networks:
+      - acme-network
+    restart: unless-stopped
+
   banking-api:
     build:
       context: ./docker/banking-api
-    ports:
-      - "8081:8080"
     environment:
       - PORT=8080
-      - ENV=local
+      - ENV=production
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
     networks:
       - acme-network
+    restart: unless-stopped
 
   mobile-banking-api:
     build:
       context: ./docker/mobile-banking-api
-    ports:
-      - "8082:8080"
     environment:
-      - PORT=8080
-      - ENV=local
+      - PORT=3000
+      - ENV=production
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
     networks:
       - acme-network
+    restart: unless-stopped
 
   wealth-management-api:
     build:
       context: ./docker/wealth-management-api
-    ports:
-      - "8083:8080"
     environment:
-      - PORT=8080
-      - ENV=local
+      - PORT=5000
+      - ENV=production
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
     networks:
       - acme-network
-
-  online-banking-portal:
-    build:
-      context: ./docker/online-banking-portal
-    ports:
-      - "8084:8080"
-    environment:
-      - PORT=8080
-      - ENV=local
-    networks:
-      - acme-network
+    restart: unless-stopped
 
   internal-compliance-api:
     build:
       context: ./docker/internal-compliance-api
-    ports:
-      - "8085:8080"
     environment:
-      - PORT=8080
-      - ENV=local
+      - PORT=8000
+      - ENV=production
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
     networks:
       - acme-network
+    restart: unless-stopped
+
+  online-banking-portal:
+    build:
+      context: ./docker/online-banking-portal
+      args:
+        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
+        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
+        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+        - VITE_API_BASE_URL=
+    networks:
+      - acme-network
+    restart: unless-stopped
 
   internal-admin-portal:
     build:
       context: ./docker/internal-admin-portal
-    ports:
-      - "8086:8080"
-    environment:
-      - PORT=8080
-      - ENV=local
+      args:
+        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
+        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
+        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
     networks:
       - acme-network
+    restart: unless-stopped
+
+  online-banking-portal-staging:
+    build:
+      context: ./docker/online-banking-portal
+      args:
+        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
+        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
+        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+        - VITE_API_BASE_URL=
+    environment:
+      - ENV=staging
+    networks:
+      - acme-network
+    restart: unless-stopped
 
 networks:
   acme-network:

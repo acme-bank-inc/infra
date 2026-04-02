@@ -22,8 +22,13 @@ variable "public_subnet_cidr" {
   default     = "10.0.1.0/24"
 }
 
-variable "container_port" {
-  description = "Port exposed by each container"
-  type        = number
-  default     = 8080
+variable "instance_type" {
+  description = "EC2 instance type (t3.micro is free tier eligible)"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "key_pair_name" {
+  description = "Name of the EC2 key pair for SSH access"
+  type        = string
 }

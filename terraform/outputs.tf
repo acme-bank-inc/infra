@@ -1,11 +1,16 @@
-output "alb_dns_name" {
-  description = "DNS name of the Application Load Balancer"
-  value       = aws_lb.main.dns_name
+output "public_ip" {
+  description = "Elastic IP of the EC2 instance"
+  value       = aws_eip.main.public_ip
 }
 
-output "ecs_cluster_name" {
-  description = "Name of the ECS cluster"
-  value       = aws_ecs_cluster.main.name
+output "ssh_command" {
+  description = "SSH command to connect to the instance"
+  value       = "ssh -i ~/.ssh/${var.key_pair_name}.pem ec2-user@${aws_eip.main.public_ip}"
+}
+
+output "app_url" {
+  description = "URL to access the application"
+  value       = "http://${aws_eip.main.public_ip}"
 }
 
 output "vpc_id" {
