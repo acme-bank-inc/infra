@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  banking-api:
+    build:
+      context: ./docker/banking-api
+    ports:
+      - "8081:8080"
+    environment:
+      - PORT=8080
+      - ENV=local
+    networks:
+      - acme-network
+
+  mobile-banking-api:
+    build:
+      context: ./docker/mobile-banking-api
+    ports:
+      - "8082:8080"
+    environment:
+      - PORT=8080
+      - ENV=local
+    networks:
+      - acme-network
+
+  wealth-management-api:
+    build:
+      context: ./docker/wealth-management-api
+    ports:
+      - "8083:8080"
+    environment:
+      - PORT=8080
+      - ENV=local
+    networks:
+      - acme-network
+
+  online-banking-portal:
+    build:
+      context: ./docker/online-banking-portal
+    ports:
+      - "8084:8080"
+    environment:
+      - PORT=8080
+      - ENV=local
+    networks:
+      - acme-network
+
+  internal-compliance-api:
+    build:
+      context: ./docker/internal-compliance-api
+    ports:
+      - "8085:8080"
+    environment:
+      - PORT=8080
+      - ENV=local
+    networks:
+      - acme-network
+
+  internal-admin-portal:
+    build:
+      context: ./docker/internal-admin-portal
+    ports:
+      - "8086:8080"
+    environment:
+      - PORT=8080
+      - ENV=local
+    networks:
+      - acme-network
+
+networks:
+  acme-network:
+    driver: bridge
