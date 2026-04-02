@@ -1,4 +1,4 @@
-.PHONY: init plan apply destroy docker-build docker-up docker-down ssh help
+.PHONY: init plan apply destroy docker-pull docker-up docker-down deploy ssh help
 
 ## Terraform targets
 
@@ -16,14 +16,17 @@ destroy: ## Destroy all Terraform resources
 
 ## Docker targets
 
-docker-build: ## Build all Docker images
-	docker compose build
+docker-pull: ## Pull all Docker images from GHCR
+	docker compose pull
 
 docker-up: ## Start all services locally
 	docker compose up -d
 
 docker-down: ## Stop all services locally
 	docker compose down
+
+deploy: ## Pull latest images and start all services
+	docker compose pull && docker compose up -d
 
 ## Remote targets
 

@@ -18,8 +18,7 @@ services:
     restart: unless-stopped
 
   banking-api:
-    build:
-      context: ../apps/banking-api
+    image: ghcr.io/acme-bank-inc/banking-api:latest
     environment:
       - PORT=8080
       - ENV=production
@@ -30,8 +29,7 @@ services:
     restart: unless-stopped
 
   mobile-banking-api:
-    build:
-      context: ../apps/mobile-banking-api
+    image: ghcr.io/acme-bank-inc/mobile-banking-api:latest
     environment:
       - PORT=3000
       - ENV=production
@@ -42,8 +40,7 @@ services:
     restart: unless-stopped
 
   wealth-management-api:
-    build:
-      context: ../apps/wealth-management-api
+    image: ghcr.io/acme-bank-inc/wealth-management-api:latest
     environment:
       - PORT=5000
       - ENV=production
@@ -54,8 +51,7 @@ services:
     restart: unless-stopped
 
   internal-compliance-api:
-    build:
-      context: ../apps/internal-compliance-api
+    image: ghcr.io/acme-bank-inc/internal-compliance-api:latest
     environment:
       - PORT=8000
       - ENV=production
@@ -66,30 +62,19 @@ services:
     restart: unless-stopped
 
   online-banking-portal:
-    build:
-      context: ../apps/online-banking-portal
-      args:
-        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
-        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
-        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+    image: ghcr.io/acme-bank-inc/online-banking-portal:latest
     networks:
       - acme-network
     restart: unless-stopped
 
   internal-admin-portal:
-    build:
-      context: ../apps/internal-admin-portal
+    image: ghcr.io/acme-bank-inc/internal-admin-portal:latest
     networks:
       - acme-network
     restart: unless-stopped
 
   online-banking-portal-staging:
-    build:
-      context: ../apps/online-banking-portal
-      args:
-        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
-        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
-        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+    image: ghcr.io/acme-bank-inc/online-banking-portal:latest
     environment:
       - ENV=staging
     networks:
