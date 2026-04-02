@@ -62,7 +62,7 @@ resource "aws_instance" "main" {
   user_data = file("${path.module}/../scripts/setup.sh")
 
   root_block_device {
-    volume_size = 20
+    volume_size = 30
     volume_type = "gp3"
   }
 

@@ -19,7 +19,7 @@ services:
 
   banking-api:
     build:
-      context: ./docker/banking-api
+      context: ../apps/banking-api
     environment:
       - PORT=8080
       - ENV=production
@@ -31,7 +31,7 @@ services:
 
   mobile-banking-api:
     build:
-      context: ./docker/mobile-banking-api
+      context: ../apps/mobile-banking-api
     environment:
       - PORT=3000
       - ENV=production
@@ -43,7 +43,7 @@ services:
 
   wealth-management-api:
     build:
-      context: ./docker/wealth-management-api
+      context: ../apps/wealth-management-api
     environment:
       - PORT=5000
       - ENV=production
@@ -55,7 +55,7 @@ services:
 
   internal-compliance-api:
     build:
-      context: ./docker/internal-compliance-api
+      context: ../apps/internal-compliance-api
     environment:
       - PORT=8000
       - ENV=production
@@ -67,35 +67,29 @@ services:
 
   online-banking-portal:
     build:
-      context: ./docker/online-banking-portal
+      context: ../apps/online-banking-portal
       args:
         - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
         - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
         - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
-        - VITE_API_BASE_URL=
     networks:
       - acme-network
     restart: unless-stopped
 
   internal-admin-portal:
     build:
-      context: ./docker/internal-admin-portal
-      args:
-        - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
-        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
-        - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+      context: ../apps/internal-admin-portal
     networks:
       - acme-network
     restart: unless-stopped
 
   online-banking-portal-staging:
     build:
-      context: ./docker/online-banking-portal
+      context: ../apps/online-banking-portal
       args:
         - VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN}
         - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
         - VITE_AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
-        - VITE_API_BASE_URL=
     environment:
       - ENV=staging
     networks:

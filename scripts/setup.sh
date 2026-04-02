@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-# Install Docker
+# Install Docker and git
 dnf update -y
 dnf install -y docker git
 systemctl enable docker
@@ -12,13 +12,18 @@ systemctl start docker
 usermod -aG docker ec2-user
 
 # Install Docker Compose plugin
-mkdir -p /usr/local/lib/docker/cli-plugins
+mkdir -p /usr/libexec/docker/cli-plugins
 curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 \
-  -o /usr/local/lib/docker/cli-plugins/docker-compose
-chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+  -o /usr/libexec/docker/cli-plugins/docker-compose
+chmod +x /usr/libexec/docker/cli-plugins/docker-compose
+
+# Install Docker Buildx plugin (0.17.0+ required by compose)
+curl -SL https://github.com/docker/buildx/releases/download/v0.21.2/buildx-v0.21.2.linux-amd64 \
+  -o /usr/libexec/docker/cli-plugins/docker-buildx
+chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
 
 # Create working directory
-mkdir -p /opt/acme-bank
+mkdir -p /opt/acme-bank/apps
 cd /opt/acme-bank
 
 # Clone all application repos
@@ -40,10 +45,12 @@ git clone "https://github.com/acme-bank-inc/infra.git" /opt/acme-bank/infra || t
 
 cd /opt/acme-bank/infra
 
-# Create .env file from example (operator should update with real values)
-if [ -f .env.example ] && [ ! -f .env ]; then
-  cp .env.example .env
-fi
+# Create .env with Auth0 config
+cat > .env << 'ENVEOF'
+AUTH0_DOMAIN=acme-bank-inc.us.auth0.com
+AUTH0_AUDIENCE=https://api.acmebank.com
+VITE_AUTH0_CLIENT_ID=cnCLsJ9gqA5AJKcndmUBdbZUf5eWFwh3
+ENVEOF
 
 # Start all services
 docker compose up -d --build
